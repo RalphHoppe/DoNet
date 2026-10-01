@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="DoNet.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:DoNet.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:DoNet.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="Transparent">
+
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility" />
+        <converters:BoolToPasswordRevealModeConverter x:Key="BoolToPasswordRevealMode" />
+    </Page.Resources>
+
+    <Grid>
+        <!--
+            ============================ Sign-in card ============================
+            Fixed 480 DIP wide and centred in the window, exactly as designed.
+        -->
+        <Border x:Name="SignInCard"
+                Width="{StaticResource CardWidth}"
+                Padding="52,52,52,49"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="{StaticResource CardBackgroundBrush}"
+                BorderBrush="{StaticResource CardBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource CardCornerRadius}"
+                Shadow="{ThemeResource CardShadow}"
+                Translation="0,0,36">
+
+            <StackPanel>
+
+                <!-- ================ Brand lockup ================ -->
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Border Width="44"
+                            Height="44"
+                            Background="{StaticResource BrandTealSoftBrush}"
+                            BorderBrush="{StaticResource BrandTealEdgeBrush}"
+                            BorderThickness="1"
+                            CornerRadius="13">
+                        <Ellipse Width="20"
+                                 Height="20"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Stroke="{StaticResource BrandTealBrush}"
+                                 StrokeThickness="5.5" />
+                    </Border>
+
+                    <TextBlock Margin="14,0,0,0"
+                               VerticalAlignment="Center"
+                               FontFamily="{StaticResource OutfitBold}"
+                               FontSize="{StaticResource WordmarkFontSize}"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Text="DoNet" />
+                </StackPanel>
+
+                <!-- ================ Headline ================ -->
+                <TextBlock Margin="0,24,0,0"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource DisplayTextStyle}"
+                           Text="Welcome back" />
+
+                <TextBlock Margin="0,6,0,0"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource BodyTextStyle}"
+                           Text="Enter your credentials to access your workspace"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap" />
+
+                <!-- ================ Username ================ -->
+                <TextBlock Margin="0,40,0,0"
+                           Style="{StaticResource FieldLabelTextStyle}"
+                           Text="USERNAME" />
+
+                <Border x:Name="UsernameField"
+                        Height="{StaticResource FieldHeight}"
+                        Tapped="OnUsernameFieldTapped"
+                        Margin="0,13,0,0"
+                        Padding="17,0,14,0"
+                        Background="{StaticResource FieldBackgroundBrush}"
+                        BorderBrush="{StaticResource FieldBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="{StaticResource FieldCornerRadius}">
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <FontIcon Grid.Column="0"
+                                  VerticalAlignment="Center"
+                                  FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                  FontSize="16"
+                                  Foreground="{StaticResource FieldIconBrush}"
+                                  Glyph="&#xE77B;" />
+
+                        <TextBox x:Name="UsernameBox"
+                                 Grid.Column="1"
+                                 AutomationProperties.Name="Username"
+                                 GotFocus="OnInputGotFocus"
+                                 KeyDown="OnFieldKeyDown"
+                                 LostFocus="OnInputLostFocus"
+                                 PlaceholderText="name@domain.com"
+                                 Style="{StaticResource BareTextBoxStyle}"
+                                 Text="{x:Bind ViewModel.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                </Border>
+
+                <!-- ================ Password ================ -->
+                <TextBlock Margin="0,27,0,0"
+                           Style="{StaticResource FieldLabelTextStyle}"
+                           Text="PASSWORD" />
+
+                <Border x:Name="PasswordField"
+                        Height="{StaticResource FieldHeight}"
+                        Tapped="OnPasswordFieldTapped"
+                        Margin="0,12,0,0"
+                        Padding="17,0,8,0"
+                        Background="{StaticResource FieldBackgroundBrush}"
+                        BorderBrush="{StaticResource FieldBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="{StaticResource FieldCornerRadius}">
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <FontIcon Grid.Column="0"
+                                  VerticalAlignment="Center"
+                                  FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                  FontSize="16"
+                                  Foreground="{StaticResource FieldIconBrush}"
+                                  Glyph="&#xE72E;" />
+
+                        <PasswordBox x:Name="PasswordInput"
+                                     Grid.Column="1"
+                                     AutomationProperties.Name="Password"
+                                     GotFocus="OnInputGotFocus"
+                                     KeyDown="OnFieldKeyDown"
+                                     LostFocus="OnInputLostFocus"
+                                     PasswordChanged="OnPasswordChanged"
+                                     PasswordRevealMode="{x:Bind ViewModel.IsPasswordRevealed, Mode=OneWay, Converter={StaticResource BoolToPasswordRevealMode}}"
+                                     PlaceholderText="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;"
+                                     Style="{StaticResource BarePasswordBoxStyle}" />
+
+                        <ToggleButton Grid.Column="2"
+                                      VerticalAlignment="Center"
+                                      AutomationProperties.Name="Show password"
+                                      IsChecked="{x:Bind ViewModel.IsPasswordRevealed, Mode=TwoWay}"
+                                      Style="{StaticResource FieldIconToggleStyle}"
+                                      ToolTipService.ToolTip="Show password">
+                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                      FontSize="16"
+                                      Glyph="&#xE7B3;" />
+                        </ToggleButton>
+                    </Grid>
+                </Border>
+
+                <!-- ================ Forgot password ================ -->
+                <HyperlinkButton Margin="0,24,0,0"
+                                 HorizontalAlignment="Right"
+                                 Command="{x:Bind ViewModel.ForgotPasswordCommand}"
+                                 Content="Forgot Password?"
+                                 Style="{StaticResource AccentLinkButtonStyle}" />
+
+                <!-- ================ Error banner (collapsed unless needed) ================ -->
+                <Border Margin="0,14,0,0"
+                        Padding="12,8,12,9"
+                        Background="#1AF2846F"
+                        BorderBrush="#33F2846F"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Visibility="{x:Bind ViewModel.HasError, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon Margin="0,1,9,0"
+                                  VerticalAlignment="Top"
+                                  FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                  FontSize="14"
+                                  Foreground="{StaticResource DangerBrush}"
+                                  Glyph="&#xE783;" />
+                        <TextBlock MaxWidth="320"
+                                   VerticalAlignment="Center"
+                                   FontFamily="{StaticResource OutfitRegular}"
+                                   FontSize="13"
+                                   Foreground="{StaticResource DangerBrush}"
+                                   Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+
+                <!-- ================ Primary action ================ -->
+                <Button Margin="0,34,0,0"
+                        Command="{x:Bind ViewModel.SignInCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}">
+                    <Grid>
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Text="Sign In"
+                                   Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource InverseBoolToVisibility}}" />
+
+                        <StackPanel HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal"
+                                    Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
+                            <ProgressRing Width="18"
+                                                   Height="18"
+                                                   Margin="0,0,10,0"
+                                                   Foreground="{StaticResource TextOnAccentBrush}"
+                                                   IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" />
+                            <TextBlock VerticalAlignment="Center" Text="Signing in" />
+                        </StackPanel>
+                    </Grid>
+                </Button>
+
+                <!-- ================ Guest ================ -->
+                <StackPanel Margin="0,20,0,0"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center"
+                               FontFamily="{StaticResource OutfitRegular}"
+                               FontSize="{StaticResource SmallFontSize}"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               Text="Or continue as " />
+                    <HyperlinkButton VerticalAlignment="Center"
+                                     Command="{x:Bind ViewModel.ContinueAsGuestCommand}"
+                                     Content="Guest"
+                                     Style="{StaticResource InlineLinkButtonStyle}" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- ============================ Footer ============================ -->
+        <StackPanel Margin="0,0,0,32"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Orientation="Horizontal">
+
+            <TextBlock VerticalAlignment="Center"
+                       Style="{StaticResource CaptionTextStyle}"
+                       Text="{x:Bind ViewModel.CopyrightNotice}" />
+
+            <TextBlock Margin="16,0,16,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource CaptionTextStyle}"
+                       Text="&#x2022;" />
+
+            <HyperlinkButton VerticalAlignment="Center"
+                             Click="OnSystemStatusClick"
+                             Style="{StaticResource FooterLinkButtonStyle}">
+                <TextBlock>
+                    <Run Text="System Status:" />
+                    <Run Text="{x:Bind ViewModel.SystemStatusLabel, Mode=OneWay}" />
+                </TextBlock>
+            </HyperlinkButton>
+        </StackPanel>
+    </Grid>
+</Page>

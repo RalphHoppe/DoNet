@@ -23,6 +23,17 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
 
+  <!-- Embedded Outfit typeface (SIL Open Font License, see Assets\Fonts\OFL.txt). -->
+  <ItemGroup>
+    <Content Include="Assets\Fonts\*.ttf" />
+    <Content Include="Assets\Fonts\OFL.txt" />
+  </ItemGroup>
+
+  <!-- Generated starfield backdrop (see tools\generate_background.py). -->
+  <ItemGroup>
+    <Content Include="Assets\Backgrounds\*.png" />
+  </ItemGroup>
+
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>

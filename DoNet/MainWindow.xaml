@@ -3,17 +3,86 @@
     x:Class="DoNet.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:DoNet"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:DoNet"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="using:DoNet.Views"
     mc:Ignorable="d"
     Title="DoNet">
 
-    <Window.SystemBackdrop>
-        <MicaBackdrop />
-    </Window.SystemBackdrop>
+    <!--
+        The starfield spans the entire window, including behind the title bar, so
+        the sign-in screen reads as one uninterrupted surface. The title bar is a
+        transparent overlay; the system caption buttons are themed to match.
+    -->
+    <Grid Background="{StaticResource WindowBackdropBrush}">
 
-    <Grid>
+        <Image x:Name="BackdropImage"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Source="ms-appx:///Assets/Backgrounds/login-background.png"
+               Stretch="UniformToFill" />
 
+        <!-- Page content sits full-bleed under the title bar. -->
+        <Frame x:Name="RootFrame" Background="Transparent" />
+
+        <!-- ===================== Custom title bar ===================== -->
+        <Grid x:Name="AppTitleBar"
+              Height="{StaticResource TitleBarHeight}"
+              VerticalAlignment="Top"
+              Background="Transparent">
+
+            <StackPanel Margin="18,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+
+                <!-- Ring mark. -->
+                <Grid Width="20" Height="20">
+                    <Ellipse Width="20"
+                             Height="20"
+                             Fill="{StaticResource BrandTealSoftBrush}" />
+                    <Ellipse Width="11"
+                             Height="11"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Stroke="{StaticResource BrandTealBrush}"
+                             StrokeThickness="3.2" />
+                </Grid>
+
+                <TextBlock Margin="10,0,0,0"
+                           VerticalAlignment="Center"
+                           FontFamily="{StaticResource OutfitSemiBold}"
+                           FontSize="14"
+                           Foreground="{StaticResource TextPrimaryBrush}"
+                           Text="DoNet" />
+
+                <Rectangle Width="1"
+                           Height="16"
+                           Margin="14,0,14,0"
+                           VerticalAlignment="Center"
+                           Fill="{StaticResource TitleBarSeparatorBrush}" />
+
+                <!-- Live session pill. -->
+                <Border Padding="9,3,11,4"
+                        VerticalAlignment="Center"
+                        Background="{StaticResource BrandTealSoftBrush}"
+                        BorderBrush="{StaticResource BrandTealEdgeBrush}"
+                        BorderThickness="1"
+                        CornerRadius="10">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="6"
+                                 Height="6"
+                                 Margin="0,0,7,0"
+                                 VerticalAlignment="Center"
+                                 Fill="{StaticResource BrandTealBrush}" />
+                        <TextBlock VerticalAlignment="Center"
+                                   FontFamily="{StaticResource OutfitMedium}"
+                                   FontSize="11.5"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   Text="Secure session" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
