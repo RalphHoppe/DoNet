@@ -17,6 +17,7 @@ public static class AppServices
     {
         Register<IAuthenticationService>(new DemoAuthenticationService());
         Register<ISystemStatusService>(new DemoSystemStatusService());
+        Register<IServiceRegistry>(new DemoServiceRegistry());
     }
 
     public static void Register<TService>(TService instance) where TService : class

@@ -4,6 +4,7 @@ using DoNet.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media.Animation;
 using Windows.System;
 
 namespace DoNet.Views;
@@ -122,14 +123,12 @@ public sealed partial class LoginPage : Page
         }
     }
 
-    private async void OnSignedIn(object? sender, UserSession session)
+    private void OnSignedIn(object? sender, UserSession session)
     {
-        // TODO: replace with navigation to the workspace shell once it exists.
-        var greeting = session.IsGuest
-            ? "You're in as a guest. Some features will be read-only."
-            : $"Signed in as {session.DisplayName}.";
-
-        await ShowDialogAsync("Welcome to DoNet", greeting);
+        // Enter the app shell. The sign-in page is dropped from the back stack
+        // so Escape / back can't return to it with a live session.
+        Frame.Navigate(typeof(ShellPage), session, new DrillInNavigationTransitionInfo());
+        Frame.BackStack.Clear();
     }
 
     private async void OnPasswordResetRequested(object? sender, EventArgs e)

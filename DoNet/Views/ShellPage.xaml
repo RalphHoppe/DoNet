@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="DoNet.Views.ShellPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:DoNet.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="Transparent">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ===================== Navigation rail ===================== -->
+        <Border Grid.Column="0" Background="{StaticResource RailBackgroundBrush}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Brand mark. Doubles as the drag handle for this corner. -->
+                <Border Grid.Row="0"
+                        Width="48"
+                        Height="48"
+                        Margin="0,20,0,0"
+                        HorizontalAlignment="Center"
+                        Background="{StaticResource BrandTealSoftBrush}"
+                        BorderBrush="{StaticResource BrandTealEdgeBrush}"
+                        BorderThickness="1"
+                        CornerRadius="16">
+                    <Ellipse Width="22"
+                             Height="22"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Stroke="{StaticResource BrandTealBrush}"
+                             StrokeThickness="6" />
+                </Border>
+
+                <StackPanel Grid.Row="1" Margin="0,24,0,0">
+
+                    <RadioButton x:Name="ServicesNav"
+                                 AutomationProperties.Name="Services"
+                                 GroupName="Rail"
+                                 IsChecked="True"
+                                 Style="{StaticResource NavRailButtonStyle}"
+                                 Tag="Services"
+                                 Checked="OnNavChecked">
+                        <StackPanel HorizontalAlignment="Center">
+                            <FontIcon HorizontalAlignment="Center"
+                                      FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                      FontSize="20"
+                                      Glyph="&#xE90F;" />
+                            <TextBlock Margin="0,6,0,0"
+                                       HorizontalAlignment="Center"
+                                       FontFamily="{StaticResource OutfitMedium}"
+                                       FontSize="11.5"
+                                       Text="Services" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton x:Name="WorkNav"
+                                 AutomationProperties.Name="Work"
+                                 GroupName="Rail"
+                                 Style="{StaticResource NavRailButtonStyle}"
+                                 Tag="Work"
+                                 Checked="OnNavChecked">
+                        <StackPanel HorizontalAlignment="Center">
+                            <FontIcon HorizontalAlignment="Center"
+                                      FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                      FontSize="20"
+                                      Glyph="&#xE8B7;" />
+                            <TextBlock Margin="0,6,0,0"
+                                       HorizontalAlignment="Center"
+                                       FontFamily="{StaticResource OutfitMedium}"
+                                       FontSize="11.5"
+                                       Text="Work" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton x:Name="PeopleNav"
+                                 AutomationProperties.Name="People"
+                                 GroupName="Rail"
+                                 Style="{StaticResource NavRailButtonStyle}"
+                                 Tag="People"
+                                 Checked="OnNavChecked">
+                        <StackPanel HorizontalAlignment="Center">
+                            <FontIcon HorizontalAlignment="Center"
+                                      FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                      FontSize="20"
+                                      Glyph="&#xE716;" />
+                            <TextBlock Margin="0,6,0,0"
+                                       HorizontalAlignment="Center"
+                                       FontFamily="{StaticResource OutfitMedium}"
+                                       FontSize="11.5"
+                                       Text="People" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton x:Name="InboxNav"
+                                 AutomationProperties.Name="Inbox"
+                                 GroupName="Rail"
+                                 Style="{StaticResource NavRailButtonStyle}"
+                                 Tag="Inbox"
+                                 Checked="OnNavChecked">
+                        <StackPanel HorizontalAlignment="Center">
+                            <Grid HorizontalAlignment="Center">
+                                <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                          FontSize="20"
+                                          Glyph="&#xEA8F;" />
+                                <!-- Unread badge. -->
+                                <Ellipse Width="7"
+                                         Height="7"
+                                         Margin="0,-1,-3,0"
+                                         HorizontalAlignment="Right"
+                                         VerticalAlignment="Top"
+                                         Fill="{StaticResource BrandTealBrush}" />
+                            </Grid>
+                            <TextBlock Margin="0,6,0,0"
+                                       HorizontalAlignment="Center"
+                                       FontFamily="{StaticResource OutfitMedium}"
+                                       FontSize="11.5"
+                                       Text="Inbox" />
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ===================== Header + content ===================== -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="84" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- This row is handed to the window as the drag region. -->
+            <Grid x:Name="HeaderBar" Grid.Row="0" Background="Transparent">
+
+                <StackPanel Margin="40,0,0,0" VerticalAlignment="Center">
+                    <TextBlock FontFamily="{StaticResource OutfitBold}"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Text="DoNet" />
+                    <TextBlock Margin="0,2,0,0"
+                               FontFamily="{StaticResource OutfitRegular}"
+                               FontSize="12.5"
+                               Foreground="{StaticResource TextTertiaryBrush}"
+                               Text="{x:Bind ViewModel.TodayLabel}" />
+                </StackPanel>
+
+                <!--
+                    Inset keeps these clear of the system caption buttons, which
+                    occupy the top-right corner of the window.
+                -->
+                <StackPanel Margin="{StaticResource CaptionButtonInset}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="12">
+
+                    <Button x:Name="HeaderSearchButton"
+                            Width="40"
+                            Height="40"
+                            AutomationProperties.Name="Search"
+                            Click="OnHeaderSearchClick"
+                            CornerRadius="20"
+                            Style="{StaticResource GhostIconButtonStyle}"
+                            ToolTipService.ToolTip="Search">
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                  FontSize="16"
+                                  Glyph="&#xE721;" />
+                    </Button>
+
+                    <Button AutomationProperties.Name="New"
+                            Click="OnNewClick"
+                            Height="40"
+                            Style="{StaticResource AccentPillButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon Margin="0,0,8,0"
+                                      VerticalAlignment="Center"
+                                      FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                      FontSize="14"
+                                      Foreground="{StaticResource TextOnAccentBrush}"
+                                      Glyph="&#xE710;" />
+                            <TextBlock VerticalAlignment="Center" Text="New" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <Frame x:Name="ContentFrame" Grid.Row="1" Background="Transparent" />
+        </Grid>
+    </Grid>
+</Page>

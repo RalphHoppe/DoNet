@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="DoNet.Views.ServicesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:DoNet.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:DoNet.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:DoNet.ViewModels"
+    mc:Ignorable="d"
+    Background="Transparent">
+
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+    </Page.Resources>
+
+    <Grid Margin="40,30,40,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- ===================== Page heading ===================== -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                <TextBlock FontFamily="{StaticResource OutfitBold}"
+                           FontSize="{StaticResource DisplayFontSize}"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource TextPrimaryBrush}"
+                           Text="Service Registry" />
+                <TextBlock MaxWidth="660"
+                           Margin="0,8,0,0"
+                           HorizontalAlignment="Left"
+                           FontFamily="{StaticResource OutfitRegular}"
+                           FontSize="15"
+                           Foreground="{StaticResource TextSecondaryBrush}"
+                           Text="Manage your active infrastructure, review connection details, and inspect system health from one place."
+                           TextWrapping="Wrap" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="16">
+
+                <!-- Search field -->
+                <Border Width="345"
+                        Height="46"
+                        Padding="16,0,14,0"
+                        Background="{StaticResource FieldBackgroundBrush}"
+                        BorderBrush="{StaticResource FieldBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="{StaticResource FieldCornerRadius}"
+                        Tapped="OnSearchFieldTapped">
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <FontIcon Grid.Column="0"
+                                  VerticalAlignment="Center"
+                                  FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                  FontSize="15"
+                                  Foreground="{StaticResource FieldIconBrush}"
+                                  Glyph="&#xE721;" />
+
+                        <TextBox x:Name="SearchBox"
+                                 Grid.Column="1"
+                                 AutomationProperties.Name="Search services"
+                                 PlaceholderText="Search services"
+                                 Style="{StaticResource BareTextBoxStyle}"
+                                 Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                </Border>
+
+                <Button Height="46"
+                        AutomationProperties.Name="New Service"
+                        Click="OnNewServiceClick"
+                        Style="{StaticResource AccentPillButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon Margin="0,0,8,0"
+                                  VerticalAlignment="Center"
+                                  FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                  FontSize="14"
+                                  Foreground="{StaticResource TextOnAccentBrush}"
+                                  Glyph="&#xE710;" />
+                        <TextBlock VerticalAlignment="Center" Text="New Service" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- ===================== Registry card ===================== -->
+        <Grid Grid.Row="1" Margin="0,28,0,44">
+
+            <Border Padding="26"
+                    VerticalAlignment="Stretch"
+                    Background="{StaticResource CardBackgroundBrush}"
+                    BorderBrush="{StaticResource CardBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Category tabs -->
+                    <StackPanel Grid.Row="0"
+                                Orientation="Horizontal"
+                                Spacing="10">
+                        <RadioButton x:Name="VpsTab"
+                                     Checked="OnCategoryChecked"
+                                     Content="VPS"
+                                     GroupName="Category"
+                                     IsChecked="True"
+                                     Style="{StaticResource CategoryTabStyle}"
+                                     Tag="Vps" />
+                        <RadioButton Checked="OnCategoryChecked"
+                                     Content="SMS"
+                                     GroupName="Category"
+                                     Style="{StaticResource CategoryTabStyle}"
+                                     Tag="Sms" />
+                        <RadioButton Checked="OnCategoryChecked"
+                                     Content="Domain"
+                                     GroupName="Category"
+                                     Style="{StaticResource CategoryTabStyle}"
+                                     Tag="Domain" />
+                    </StackPanel>
+
+                    <!-- Column headings -->
+                    <Border Grid.Row="1"
+                            Height="44"
+                            Margin="0,28,0,0"
+                            Padding="18,0"
+                            Background="{StaticResource TableHeaderBackgroundBrush}"
+                            CornerRadius="10"
+                            Visibility="{x:Bind ViewModel.IsVpsSelected, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="256" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="269" />
+                                <ColumnDefinition Width="300" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Style="{StaticResource TableHeaderTextStyle}" Text="TYPE" />
+                            <TextBlock Grid.Column="1" Style="{StaticResource TableHeaderTextStyle}" Text="IP" />
+                            <TextBlock Grid.Column="2" Style="{StaticResource TableHeaderTextStyle}" Text="PORT" />
+                            <TextBlock Grid.Column="3" Style="{StaticResource TableHeaderTextStyle}" Text="ROOT PASSWORD" />
+                            <TextBlock Grid.Column="4" Style="{StaticResource TableHeaderTextStyle}" Text="SYSTEM" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Rows -->
+                    <ListView Grid.Row="2"
+                              MaxHeight="520"
+                              Margin="0,4,0,0"
+                              Padding="0"
+                              IsItemClickEnabled="False"
+                              ItemsSource="{x:Bind ViewModel.Services}"
+                              ScrollViewer.HorizontalScrollMode="Disabled"
+                              SelectionMode="None">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="MinHeight" Value="0" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Background" Value="Transparent" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:VpsServiceItemViewModel">
+                                <Border Height="74"
+                                        Padding="18,0"
+                                        BorderBrush="{StaticResource RowDividerBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="256" />
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="269" />
+                                            <ColumnDefinition Width="300" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- TYPE -->
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock FontFamily="{StaticResource OutfitSemiBold}"
+                                                       FontSize="15"
+                                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                                       Text="{x:Bind Name}" />
+                                            <TextBlock Margin="0,3,0,0"
+                                                       FontFamily="{StaticResource OutfitRegular}"
+                                                       FontSize="12.5"
+                                                       Foreground="{StaticResource TextTertiaryBrush}"
+                                                       Text="{x:Bind OperatingSystem}" />
+                                        </StackPanel>
+
+                                        <!-- IP -->
+                                        <TextBlock Grid.Column="1"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="{StaticResource OutfitRegular}"
+                                                   FontSize="14.5"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                                   Text="{x:Bind IpAddress}" />
+
+                                        <!-- PORT -->
+                                        <TextBlock Grid.Column="2"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="{StaticResource OutfitRegular}"
+                                                   FontSize="14.5"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                                   Text="{x:Bind PortText}" />
+
+                                        <!-- ROOT PASSWORD -->
+                                        <Border Grid.Column="3"
+                                                Height="36"
+                                                Margin="0,0,20,0"
+                                                Padding="14,0,6,0"
+                                                VerticalAlignment="Center"
+                                                Background="{StaticResource FieldBackgroundBrush}"
+                                                BorderBrush="{StaticResource FieldBorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="9">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="0"
+                                                           VerticalAlignment="Center"
+                                                           FontFamily="{StaticResource OutfitRegular}"
+                                                           FontSize="13.5"
+                                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                                           Text="{x:Bind DisplayPassword, Mode=OneWay}"
+                                                           TextTrimming="CharacterEllipsis" />
+
+                                                <ToggleButton Grid.Column="1"
+                                                              Width="28"
+                                                              Height="28"
+                                                              AutomationProperties.Name="Show root password"
+                                                              IsChecked="{x:Bind IsPasswordRevealed, Mode=TwoWay}"
+                                                              Style="{StaticResource FieldIconToggleStyle}"
+                                                              ToolTipService.ToolTip="Show root password">
+                                                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                                              FontSize="15"
+                                                              Glyph="&#xE7B3;" />
+                                                </ToggleButton>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- SYSTEM -->
+                                        <Border Grid.Column="4"
+                                                Height="34"
+                                                Padding="14,0,8,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Background="{StaticResource ChipBackgroundBrush}"
+                                                BorderBrush="{StaticResource ChipBorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="9">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock VerticalAlignment="Center"
+                                                           FontFamily="{StaticResource OutfitRegular}"
+                                                           FontSize="13.5"
+                                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                                           Text="{x:Bind SystemLabel}" />
+
+                                                <!-- Opens the System Information panel. -->
+                                                <Button Width="26"
+                                                        Height="26"
+                                                        Margin="8,0,0,0"
+                                                        VerticalAlignment="Center"
+                                                        AutomationProperties.Name="System information"
+                                                        Click="OnSystemInfoClick"
+                                                        CornerRadius="8"
+                                                        Style="{StaticResource GhostIconButtonStyle}"
+                                                        Tag="{x:Bind}"
+                                                        ToolTipService.ToolTip="System information">
+                                                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                                              FontSize="14"
+                                                              Glyph="&#xE946;" />
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <!-- Empty state for SMS / Domain and for no search hits -->
+                    <StackPanel Grid.Row="4"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Visibility="{x:Bind ViewModel.IsEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
+                        <FontIcon HorizontalAlignment="Center"
+                                  FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                  FontSize="30"
+                                  Foreground="{StaticResource TextTertiaryBrush}"
+                                  Glyph="&#xE7C3;" />
+                        <TextBlock Margin="0,16,0,0"
+                                   HorizontalAlignment="Center"
+                                   FontFamily="{StaticResource OutfitSemiBold}"
+                                   FontSize="16"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   Text="{x:Bind ViewModel.EmptyStateTitle, Mode=OneWay}" />
+                        <TextBlock Margin="0,6,0,0"
+                                   HorizontalAlignment="Center"
+                                   FontFamily="{StaticResource OutfitRegular}"
+                                   FontSize="13.5"
+                                   Foreground="{StaticResource TextTertiaryBrush}"
+                                   Text="{x:Bind ViewModel.EmptyStateMessage, Mode=OneWay}" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="3"
+                               Margin="2,22,0,0"
+                               FontFamily="{StaticResource OutfitRegular}"
+                               FontSize="13"
+                               Foreground="{StaticResource TextTertiaryBrush}"
+                               Text="{x:Bind ViewModel.SummaryText, Mode=OneWay}" />
+                </Grid>
+            </Border>
+
+            <!-- ===================== System Information overlay ===================== -->
+            <Border x:Name="InspectorPanel"
+                    Width="388"
+                    Margin="0,93,11,2"
+                    Padding="22"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch"
+                    Background="{StaticResource PanelBackgroundBrush}"
+                    BorderBrush="{StaticResource PanelBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="18"
+                    Shadow="{ThemeResource CardShadow}"
+                    Translation="0,0,48"
+                    Visibility="{x:Bind ViewModel.IsInspectorOpen, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Panel header -->
+                    <Grid Grid.Row="0">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock FontFamily="{StaticResource OutfitBold}"
+                                       FontSize="19"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       Text="System Information" />
+                            <TextBlock Margin="0,4,0,0"
+                                       FontFamily="{StaticResource OutfitRegular}"
+                                       FontSize="13"
+                                       Foreground="{StaticResource TextTertiaryBrush}"
+                                       Text="{x:Bind ViewModel.InspectedService.Descriptor, Mode=OneWay}" />
+                        </StackPanel>
+
+                        <Button Width="32"
+                                Height="32"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                AutomationProperties.Name="Close"
+                                Command="{x:Bind ViewModel.CloseInspectorCommand}"
+                                CornerRadius="16"
+                                Style="{StaticResource GhostIconButtonStyle}"
+                                ToolTipService.ToolTip="Close">
+                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                      FontSize="13"
+                                      Glyph="&#xE711;" />
+                        </Button>
+                    </Grid>
+
+                    <!-- Metric cards -->
+                    <Grid Grid.Row="1"
+                          Margin="0,22,0,0"
+                          ColumnSpacing="12"
+                          RowSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <local:MetricCard Grid.Row="0"
+                                          Grid.Column="0"
+                                          Caption="CPU"
+                                          Detail="{x:Bind ViewModel.InspectedService.Information.CpuDetail, Mode=OneWay}"
+                                          Value="{x:Bind ViewModel.InspectedService.Information.Cpu, Mode=OneWay}" />
+                        <local:MetricCard Grid.Row="0"
+                                          Grid.Column="1"
+                                          Caption="MEMORY"
+                                          Detail="{x:Bind ViewModel.InspectedService.Information.MemoryDetail, Mode=OneWay}"
+                                          Value="{x:Bind ViewModel.InspectedService.Information.Memory, Mode=OneWay}" />
+                        <local:MetricCard Grid.Row="1"
+                                          Grid.Column="0"
+                                          Caption="DISK"
+                                          Detail="{x:Bind ViewModel.InspectedService.Information.DiskDetail, Mode=OneWay}"
+                                          Value="{x:Bind ViewModel.InspectedService.Information.Disk, Mode=OneWay}" />
+                        <local:MetricCard Grid.Row="1"
+                                          Grid.Column="1"
+                                          Caption="BANDWIDTH"
+                                          Detail="{x:Bind ViewModel.InspectedService.Information.BandwidthDetail, Mode=OneWay}"
+                                          Value="{x:Bind ViewModel.InspectedService.Information.Bandwidth, Mode=OneWay}" />
+                        <local:MetricCard Grid.Row="2"
+                                          Grid.Column="0"
+                                          Caption="OS"
+                                          Detail="{x:Bind ViewModel.InspectedService.Information.KernelDetail, Mode=OneWay}"
+                                          Value="{x:Bind ViewModel.InspectedService.Information.OperatingSystem, Mode=OneWay}" />
+                        <local:MetricCard Grid.Row="2"
+                                          Grid.Column="1"
+                                          Caption="REGION"
+                                          Detail="{x:Bind ViewModel.InspectedService.Information.RegionDetail, Mode=OneWay}"
+                                          Value="{x:Bind ViewModel.InspectedService.Information.Region, Mode=OneWay}" />
+                    </Grid>
+
+                    <!-- Runtime stats -->
+                    <StackPanel Grid.Row="2" Margin="0,22,0,0" Spacing="9">
+                        <Grid>
+                            <TextBlock FontFamily="{StaticResource OutfitRegular}"
+                                       FontSize="14"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       Text="Uptime" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       FontFamily="{StaticResource OutfitSemiBold}"
+                                       FontSize="14"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       Text="{x:Bind ViewModel.InspectedService.Information.Uptime, Mode=OneWay}" />
+                        </Grid>
+                        <Grid>
+                            <TextBlock FontFamily="{StaticResource OutfitRegular}"
+                                       FontSize="14"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       Text="Load Average" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       FontFamily="{StaticResource OutfitSemiBold}"
+                                       FontSize="14"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       Text="{x:Bind ViewModel.InspectedService.Information.LoadAverage, Mode=OneWay}" />
+                        </Grid>
+                        <Grid>
+                            <TextBlock FontFamily="{StaticResource OutfitRegular}"
+                                       FontSize="14"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       Text="Last Reboot" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       FontFamily="{StaticResource OutfitSemiBold}"
+                                       FontSize="14"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       Text="{x:Bind ViewModel.InspectedService.Information.LastReboot, Mode=OneWay}" />
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Panel footer -->
+                    <Grid Grid.Row="4" Margin="0,22,0,0">
+                        <TextBlock VerticalAlignment="Center"
+                                   FontFamily="{StaticResource OutfitRegular}"
+                                   FontSize="12.5"
+                                   Foreground="{StaticResource TextTertiaryBrush}"
+                                   Text="Updated 2 minutes ago" />
+
+                        <Button HorizontalAlignment="Right"
+                                Command="{x:Bind ViewModel.CopyDetailsCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Margin="0,0,8,0"
+                                          VerticalAlignment="Center"
+                                          FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                          FontSize="14"
+                                          Glyph="&#xE8C8;" />
+                                <TextBlock VerticalAlignment="Center" Text="Copy details" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>
