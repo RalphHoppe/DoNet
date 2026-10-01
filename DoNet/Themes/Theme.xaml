@@ -14,7 +14,6 @@
     <Color x:Key="BrandTealColor">#4FBCA1</Color>
     <Color x:Key="BrandTealHoverColor">#5CCBAF</Color>
     <Color x:Key="BrandTealPressedColor">#3FA389</Color>
-    <Color x:Key="BrandTealDeepColor">#1E6D5F</Color>
     <Color x:Key="SurfaceDeepColor">#06100F</Color>
 
     <SolidColorBrush x:Key="BrandTealBrush" Color="{StaticResource BrandTealColor}" />
@@ -33,7 +32,6 @@
     <SolidColorBrush x:Key="TextSecondaryBrush" Color="#A9BEB9" />
     <SolidColorBrush x:Key="TextTertiaryBrush" Color="#8A9D98" />
     <SolidColorBrush x:Key="TextLabelBrush" Color="#93A6A1" />
-    <SolidColorBrush x:Key="TextPlaceholderBrush" Color="#7E918D" />
     <SolidColorBrush x:Key="TextOnAccentBrush" Color="#FFFFFF" />
     <SolidColorBrush x:Key="DangerBrush" Color="#F2846F" />
 
@@ -57,14 +55,11 @@
     <SolidColorBrush x:Key="FieldBackgroundHoverBrush" Color="#14FFFFFF" />
     <SolidColorBrush x:Key="FieldBackgroundFocusedBrush" Color="#17FFFFFF" />
     <SolidColorBrush x:Key="FieldBorderBrush" Color="#1CFFFFFF" />
-    <SolidColorBrush x:Key="FieldBorderHoverBrush" Color="#2BFFFFFF" />
     <SolidColorBrush x:Key="FieldIconBrush" Color="#8DA09B" />
 
     <!-- Title bar. -->
     <SolidColorBrush x:Key="TitleBarHoverBrush" Color="#18FFFFFF" />
     <SolidColorBrush x:Key="TitleBarPressedBrush" Color="#24FFFFFF" />
-    <SolidColorBrush x:Key="TitleBarCloseHoverBrush" Color="#C42B1C" />
-    <SolidColorBrush x:Key="TitleBarClosePressedBrush" Color="#9E2318" />
     <SolidColorBrush x:Key="TitleBarSeparatorBrush" Color="#1FFFFFFF" />
 
     <!-- ============================ Typography ============================ -->
@@ -136,5 +131,29 @@
     <SolidColorBrush x:Key="TextControlButtonForeground" Color="#8DA09B" />
     <SolidColorBrush x:Key="TextControlButtonForegroundPointerOver" Color="#F2F7F5" />
     <SolidColorBrush x:Key="TextControlButtonForegroundPressed" Color="#D6E2DF" />
+
+    <!--
+        ============================ App shell ============================
+        Tokens used by the navigation rail, the registry table and the
+        System Information overlay.
+    -->
+
+    <SolidColorBrush x:Key="RailBackgroundBrush" Color="#0A1614" />
+    <SolidColorBrush x:Key="RailSelectedBrush" Color="#1E4F46" />
+    <SolidColorBrush x:Key="RailHoverBrush" Color="#12FFFFFF" />
+
+    <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#F2101E1B" />
+    <SolidColorBrush x:Key="PanelBorderBrush" Color="#24FFFFFF" />
+    <SolidColorBrush x:Key="MetricCardBackgroundBrush" Color="#0DFFFFFF" />
+    <SolidColorBrush x:Key="MetricCardBorderBrush" Color="#1AFFFFFF" />
+
+    <SolidColorBrush x:Key="TableHeaderBackgroundBrush" Color="#0AFFFFFF" />
+    <SolidColorBrush x:Key="RowDividerBrush" Color="#12FFFFFF" />
+
+    <SolidColorBrush x:Key="ChipBackgroundBrush" Color="#0DFFFFFF" />
+    <SolidColorBrush x:Key="ChipBorderBrush" Color="#1FFFFFFF" />
+
+    <!-- Horizontal space reserved for the system caption buttons. -->
+    <Thickness x:Key="CaptionButtonInset">0,0,150,0</Thickness>
 
 </ResourceDictionary>

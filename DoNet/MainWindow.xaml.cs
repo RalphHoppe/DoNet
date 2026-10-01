@@ -123,6 +123,24 @@ public sealed partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Hands the window's drag region to an element owned by a page. The default
+    /// title bar is collapsed so it stops intercepting pointer input over the
+    /// page's own header.
+    /// </summary>
+    public void UseDragRegion(UIElement element)
+    {
+        AppTitleBar.Visibility = Visibility.Collapsed;
+        SetTitleBar(element);
+    }
+
+    /// <summary>Restores the window's own title bar as the drag region.</summary>
+    public void ResetTitleBar()
+    {
+        AppTitleBar.Visibility = Visibility.Visible;
+        SetTitleBar(AppTitleBar);
+    }
+
     private double GetScaleFactor()
     {
         var scale = Content?.XamlRoot?.RasterizationScale ?? 0d;
